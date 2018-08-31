@@ -1,32 +1,166 @@
 {
   "posts": [
     {
-      "id": 1,
+      "title": "Cut toxic people",
+      "body": "putting tape on my webcam thinking how the FBI agent watched me cry everyday for a year and didn't once check up on me ",
+      "owner": "GloverDonald",
+      "userId": 3,
+      "categoryId": 2,
+      "id": 2
+    },
+    {
+      "title": "peter parker ",
+      "body": "peter parker in the 2002 movie is fuckin.... incredible. he gets bitten\nby a fuckin jacked red blue spider and he doesnt say “hey someone\n\nshould take me to the hospital mayhaps?” he just goes home. then\nthe bite swells to the size of a fuckin jawbreaker but he’s like “nah i\njust need a nap.” then he wakes up the next day and discovers that\nhe DOESN’T NEED HIS GLASSES ANYMORE and he has a fuckin\nsix pack. does he flip his entire Fuck? no. he says, “cool.” iconic.",
+      "owner": "Iron Man",
+      "userId": 5,
+      "category": "Uncatagorized",
+      "categoryId": 1,
+      "id": 3
+    },
+    {
+      "title": "wydgwdu",
+      "body": "asochjbnscoh",
+      "owner": "AhmadGhost",
       "userId": 1,
-      "title": "sunt aut ffdsfsddfslat provident occaecati excepturi optio reprehenderit",
-      "body": "quia etdandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrfdsfdsfdst rem eveniet architecto",
-      "categoryId": 1
+      "category": "Political",
+      "categoryId": 2,
+      "id": 4
+    },
+    {
+      "title": "quote",
+      "body": "“I'm selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can't handle me at my worst, then you sure as hell don't deserve me at my best.”",
+      "owner": "Ciri",
+      "userId": 4,
+      "category": "Quotes and Sayings",
+      "categoryId": 4,
+      "id": 5
+    },
+    {
+      "title": "quote",
+      "body": "This life is what you make it. No matter what, you're going to mess up sometimes, it's a universal truth. But the good part is you get to decide how you're going to mess it up",
+      "owner": "Marilyn Monroe",
+      "userId": 7,
+      "category": "Quotes and Sayings",
+      "categoryId": 4,
+      "id": 6
+    },
+    {
+      "title": "test",
+      "body": "askdusah",
+      "owner": "AhmadGhost",
+      "userId": 1,
+      "category": "Quotes and Sayings",
+      "categoryId": 4,
+      "id": 7
+    },
+    {
+      "title": "tt",
+      "body": "akudbas",
+      "owner": "AhmadGhost",
+      "category": "Political",
+      "categoryId": 2,
+      "userId": 1,
+      "id": 8
     }
   ],
   "comments": [
     {
-      "id": 1,
-      "body": "quia etdandae molestiae ut ut quas totam\nnostrfdsfdsfdst rem eveniet architecto",
-      "postId": 1,
-      "userId": 1
+      "body": "2002 peter parker had no health insurance",
+      "owner": "AhmadGhost",
+      "title": "really ",
+      "postId": "3",
+      "userId": 1,
+      "id": 2
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "postId": 2,
+      "body": "sdfiudsgsdbiu",
+      "user": {
+        "name": "Ahmad Khatab",
+        "email": "ahmadzendane725@gmail.com",
+        "userName": "AhmadGhost",
+        "id": 1
+      },
+      "post": {
+        "id": 2,
+        "userId": 3,
+        "title": "Cut toxic people",
+        "body": "putting tape on my webcam thinking how the FBI agent watched me cry everyday for a year and didn't once check up on me "
+      }
+    },
+    {
+      "body": "where is Geralt im looking for him the wild hunt came :(((",
+      "owner": "Ciri",
+      "title": "test",
+      "postId": "2",
+      "userId": 4,
+      "id": 4
     }
   ],
   "users": [
     {
-      "id": 1,
-      "name": "typicode",
-      "email": "user@example.com"
+      "name": "Ahmad Khatab",
+      "email": "ahmadzendane725@gmail.com",
+      "userName": "AhmadGhost",
+      "id": 1
+    },
+    {
+      "name": "The Witcher",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "Geralt Of Rivia",
+      "id": 2
+    },
+    {
+      "name": "Donald Glover",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "GloverDonald",
+      "id": 3
+    },
+    {
+      "name": "Crilla",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "Ciri",
+      "id": 4
+    },
+    {
+      "name": "Tony Stark",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "Iron Man",
+      "id": 5
+    },
+    {
+      "name": "Peter Parker",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "Spider Man",
+      "id": 6
+    },
+    {
+      "name": "Marlene monroe ",
+      "email": "ahmadkhatab017@mail.com",
+      "userName": "Marilyn Monroe",
+      "id": 7
+    },
+    {
+      "name": "test",
+      "userName": "test",
+      "email": "test",
+      "id": 8
     }
   ],
   "categories": [
     {
       "id": 1,
       "name": "Uncatagorized"
+    },
+    {
+      "name": "Political",
+      "id": 2
+    },
+    {
+      "name": "Quotes and Sayings",
+      "id": 4
     }
   ]
 }

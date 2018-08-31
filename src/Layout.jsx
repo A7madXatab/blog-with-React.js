@@ -1,6 +1,9 @@
+//eslint-disable-next-line
 import React, { Component } from 'react';
+//eslint-disable-next-line
 import { Route, NavLink } from 'react-router-dom';
-import { Navbar, Nav, NavItem, Collapse, NavbarBrand, NavbarToggler } from 'reactstrap';
+import { Navbar, Nav, NavItem, Collapse, NavbarToggler } from 'reactstrap';
+//NavbarBrand,
 
 class Layout extends Component {
     state = {
@@ -16,13 +19,16 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <Navbar color="light" light expand="md">
+                <Navbar className="myNav" color="light" light expand="md">
                     <NavLink className="navbar-brand" to="/">Re:Coded Blog</NavLink>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink to="/posts" className="nav-link" activeClassName="active">Posts</NavLink>
+                                <NavLink  to="/posts" className="nav-link" activeClassName="active">Posts</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink  to="/MainPage" className="nav-link" activeClassName="active">MainPage</NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink to="/comments" className="nav-link" activeClassName="active">Comments</NavLink>
