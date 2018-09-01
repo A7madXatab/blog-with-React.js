@@ -6,7 +6,7 @@ body {
 *{
   font-family: 'Merriweather', serif;
 }
-.myNav h4{
+NavBar.myNav h4{
   color: white;
   pointer-events: none;
 }

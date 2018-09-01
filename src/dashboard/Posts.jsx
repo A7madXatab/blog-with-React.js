@@ -30,7 +30,7 @@ function findCategoryId(postObject)
                  })
          })
 }
-function deleteLinksToThisPost(postToDelete)
+function deleteCommentsMadeOnPost(postToDelete)
 {
    fetch(baseUrl+"/comments")
     .then(res => res.json())
@@ -81,11 +81,22 @@ class Posts extends Component {
          findUserId(newPostObject)
             this.toggle();
             axios.get(baseUrl+"/posts")
-             .then((res) => {
-                this.toggle()
+             .then(() => {
+              fetch(baseUrl+"/posts")
+              .then(res => res.json())
+              .then(response =>{
                 this.setState({
-                  users:res.data
+                  posts:response,
+                  newPost:{
+                   title:"",
+                   body:"",
+                   owner:"",
+                   categorey:""
+                 },
+                 emptyField:false
                 })
+                this.toggle();
+              })
              })
   }
    componentDidMount()
@@ -111,42 +122,53 @@ class Posts extends Component {
       this.setState((prevState) => ({
         posts:prevState.posts.filter((currentPost) => currentPost!==post)
       }))
-      deleteLinksToThisPost(post);
+      deleteCommentsMadeOnPost(post);
       axios.delete(baseUrl+"/posts/"+post.id)
    }
    editPost(post)
    {
      this.setState({
-       newPost:{
-         title:post.title,
-         owner:post.owner,
-         body:post.body,
-       },
+       newPost:post,
        modalOpen:true,
        editIsOn:true
      })
    }
    isEditing()
-   { 
-       if(!this.state.editIsOn)
-        return null;
+  {
+    if(!this.state.editIsOn)
+     return null;
+    
+    return <Button className="mt-2 btn" color="success" onClick={this.saveChanges.bind(this)}>Save</Button>
+  }
+  saveChanges()
+  {
+    let updatedPostObject = this.state.newPost;
+    axios.put(baseUrl+"/posts/"+updatedPostObject.id,updatedPostObject)
+     .then(() => {
+      fetch(baseUrl+"/posts")
+      .then(res => res.json())
+      .then(response =>{
+        this.setState({
+          posts:response,
+          newPost:{
+           title:"",
+           body:"",
+           owner:"",
+           categorey:""
+         },
+         emptyField:false
+        })
+        this.toggle();
+      })
+     })
+  }
+  getReadOnlyId()
+  {
+    if(!this.state.editIsOn)
+     return null;
 
-        return <Button color="success" className="mt-2" >Save</Button>
-   }
-   editIsOn()
-   {
-     if(!this.disable)
-      return null;
-
-      else return true
-   }
-   saveChangesToPost(updatedPostObject)
-   {
-        updatedPostObject.title = this.state.newPost.title;
-        updatedPostObject.body = this.state.newPost.body;
-
-        console.log(updatedPostObject)
-   }
+     return <input className="form-control" type="text" value={this.state.newPost.id} readOnly></input>
+  }
   render() {
     let span="";
     if(this.state.emptyField)
@@ -184,6 +206,7 @@ class Posts extends Component {
        ))}
      </Form>
       <Form>
+      {this.getReadOnlyId()}
       <input value={this.state.newPost.title} 
       onChange={(e) => this.setState({newPost:{...this.state.newPost,title:e.target.value}})}
       type="text" placeholder="Title" className="form-control" classID="title" />
@@ -197,7 +220,7 @@ class Posts extends Component {
       </ModalBody>
       <ModalFooter>
         {this.isEditing()}
-        <Button onClick={this.postPost.bind(this)} disabled={this.editIsOn()}
+        <Button onClick={this.postPost.bind(this)}
        type="button" className="btn btn-info mt-2 mr-1" classID="postButton">Post</Button>
        <Button type="reset" className="btn mt-2 clear" classID="clear">Clear</Button>
         <Button color="warning" className="mt-2" onClick={() => {

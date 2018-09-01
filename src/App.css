@@ -72,8 +72,8 @@ textarea.form-control{
   resize: none;
   border-radius: 20px;
 }
-div.myNav{
-  background-color: #24292e;
+NavBar.myNav{
+  background-color:lightgray;
 }
 nav.myNav{
   background:#24292e;

@@ -19,7 +19,7 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <Navbar className="myNav" color="light" light expand="md">
+                <Navbar color="light" light expand="md">
                     <NavLink className="navbar-brand" to="/">Re:Coded Blog</NavLink>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>

@@ -2,6 +2,36 @@ import React, { Component } from 'react';
 import {Modal, ModalBody, ModalFooter,Table, ModalHeader, Col, Button,Form} from 'reactstrap';
 import axios from 'axios';
 let rootUrl = "http://localhost:3000"
+function updatePostsCategoryToDate(updateCategoryObject)
+{
+  fetch(rootUrl+"/posts")
+   .then(res => res.json())
+   .then(response => {
+     response.forEach(post => {
+       if(post.categoryId === updateCategoryObject.id)
+        {
+          post.category = updateCategoryObject.name;
+          axios.put(rootUrl+"/posts/"+post.id,post);
+        }
+     })
+   })
+}
+
+function resetPostCategory(categoryToBeDeleted)
+{
+  fetch(rootUrl+"/posts")
+   .then(res => res.json())
+   .then(response => {
+     response.forEach(post => {
+       if(post.categoryId === categoryToBeDeleted.id)
+       {
+         post.category = "Uncatagorized";
+         post.categoryId = 1;
+         axios.put(rootUrl+"/posts/"+post.id,post);
+       }
+     })
+   })
+}
 class Categories extends Component {
   state= {
     categories:[],
@@ -31,7 +61,30 @@ class Categories extends Component {
     if(!this.state.editIsOn)
      return null;
     
-    return <Button className="mt-2 btn" color="success">Save</Button>
+    return <Button className="mt-2 btn" color="success" onClick={this.saveChanges.bind(this)}>Save</Button>
+  }
+  saveChanges()
+  {
+    let updateCategoryObject = {
+      name:this.state.newCategory.name,
+      id:this.state.newCategory.id
+    }
+    axios.put(rootUrl+"/categories/"+this.state.newCategory.id,updateCategoryObject)
+     .then(() => {
+       updatePostsCategoryToDate(updateCategoryObject);
+       this.toggle();
+       fetch(rootUrl+"/categories")
+       .then(res => res.json())
+       .then(response =>{
+         this.setState({
+           categories:response,
+           newCategory:{
+            name:""
+          },
+          emptyField:false
+         })
+       })
+      })
   }
   addNewCategory()
   {
@@ -63,13 +116,15 @@ class Categories extends Component {
     this.setState(
       {categories:this.state.categories.filter((category) =>category !== categoryObject)
       })
+      resetPostCategory(categoryObject);
       axios.delete(rootUrl+"/categories/"+categoryObject.id)
   }
   editCategory(categoryObject)
   {
     this.setState({
       newCategory:{
-        name:categoryObject.name
+        name:categoryObject.name,
+        id:categoryObject.id
       },
       editIsOn:true
     })
@@ -86,14 +141,7 @@ class Categories extends Component {
     if(!this.state.editIsOn)
      return null;
 
-     return <input className="form-control" type="text" value={ fetch(rootUrl+"/categories")
-     .then(res => res.json())
-     .then(response => {
-       response.forEach(category => {
-         if(category.name === this.state.newCategory.name)
-          return category.name
-       })
-     })} readOnly></input>
+     return <input className="form-control" type="text" value={this.state.newCategory.id} readOnly></input>
   }
   getPostId()
   {
@@ -102,7 +150,7 @@ class Categories extends Component {
           .then(response => {
             response.forEach(category => {
               if(category.name === this.state.newCategory.name)
-               console.log(category)
+               return category.name
             })
           })
   }
