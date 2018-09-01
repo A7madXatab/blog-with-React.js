@@ -52,15 +52,6 @@
       "category": "Quotes and Sayings",
       "categoryId": 4,
       "id": 7
-    },
-    {
-      "title": "tt",
-      "body": "akudbas",
-      "owner": "AhmadGhost",
-      "category": "Political",
-      "categoryId": 2,
-      "userId": 1,
-      "id": 8
     }
   ],
   "comments": [
@@ -71,24 +62,6 @@
       "postId": "3",
       "userId": 1,
       "id": 2
-    },
-    {
-      "id": 3,
-      "userId": 1,
-      "postId": 2,
-      "body": "sdfiudsgsdbiu",
-      "user": {
-        "name": "Ahmad Khatab",
-        "email": "ahmadzendane725@gmail.com",
-        "userName": "AhmadGhost",
-        "id": 1
-      },
-      "post": {
-        "id": 2,
-        "userId": 3,
-        "title": "Cut toxic people",
-        "body": "putting tape on my webcam thinking how the FBI agent watched me cry everyday for a year and didn't once check up on me "
-      }
     },
     {
       "body": "where is Geralt im looking for him the wild hunt came :(((",
@@ -141,12 +114,6 @@
       "email": "ahmadkhatab017@mail.com",
       "userName": "Marilyn Monroe",
       "id": 7
-    },
-    {
-      "name": "test",
-      "userName": "test",
-      "email": "test",
-      "id": 8
     }
   ],
   "categories": [
@@ -161,6 +128,10 @@
     {
       "name": "Quotes and Sayings",
       "id": 4
+    },
+    {
+      "name": "test",
+      "id": 5
     }
   ]
 }

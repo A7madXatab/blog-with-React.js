@@ -2,13 +2,37 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {Modal, ModalBody, ModalFooter,Table, ModalHeader, Col, Button,Form} from 'reactstrap';
 let rootUrl = "http://localhost:3000"
+function deletePostsMadeByUser(userToBeDeleted)
+{
+   fetch(rootUrl+"/posts")
+    .then(res => res.json())
+    .then(response => {
+      response.forEach(post => {
+        if(post.userId === userToBeDeleted.id)
+         axios.delete(rootUrl+"/posts/"+post.id)
+      })
+    })
+}
+function deleteCommentsMadeByUser(userToBeDeleted)
+{
+  fetch(rootUrl+"/comments")
+  .then(res => res.json())
+  .then(response => {
+    response.forEach(comment => {
+      if(comment.userId === userToBeDeleted.id)
+       axios.delete(rootUrl+"/comments/"+comment.id);
+    })
+  })
+}
 class Users extends Component {
 
   state = {
     users: [],
-    newUserName:"",
+    newUser:{
+      newUserName:"",
     newUserUserName:"",
-    newUserEmail:"",
+    newUserEmail:""
+    },
     modalOpen: false
   }
   toggle = () => {
@@ -17,39 +41,52 @@ class Users extends Component {
     })
   }
   componentDidMount() {
-    // Ofc, you should use the local not this link
     axios.get(rootUrl+"/users")
       .then(res => {
         this.setState({
           users: res.data
         })
-        // Now the state will be updated with the data received from response
       })
   }
   addNewUser()
   {
      let userObject = {
-       name:this.state.newUserName,
-       userName:this.state.newUserUserName,
-       email:this.state.newUserEmail
+       name:this.state.newUser.newUserName,
+       userName:this.state.newUser.newUserUserName,
+       email:this.state.newUser.newUserEmail
      }
-     axios.post(rootUrl+"/users",userObject);
+     axios.post(rootUrl+"/users",userObject)
+     .then(() =>{
+      fetch(rootUrl+"/users")
+      .then(res => res.json())
+      .then(res=>{
+        this.toggle()
+        this.setState({
+          users:res
+        })
+      })
+     })
+     
   }
-   deleteButton(user)
+   deleteUser(user)
    {
       this.setState((prevState) => ({
         users:prevState.users.filter((currentUser) => currentUser!==user)
       }))
+      deletePostsMadeByUser(user);
+      deleteCommentsMadeByUser(user);
       axios.delete(rootUrl+"/users/"+user.id);
    }
-   editButton(user)
+   editUser(user)
    {
      this.setState({
-       newUserName:user.name,
-       newUserEmail:user.email,
-       newUserUserName:user.userName
+       newUser:{
+        newUserName:user.name,
+        newUserEmail:user.email,
+        newUserUserName:user.userName
+       }
      })
-     this.toggle;
+     this.toggle();
    }
   render() {
     return (
@@ -61,26 +98,35 @@ class Users extends Component {
       <ModalHeader toggle={this.toggle}>New User</ModalHeader>
       <ModalBody>
           <Form>
-          <input  value={this.state.newUserName} onChange={(e) => this.setState({newUserName:e.target.value})}
+          <input  value={this.state.newUser.newUserName} 
+          onChange={(e) => this.setState({newUser:{...this.state.newUser,newUserName:e.target.value}})}
           type="text" placeholder="Your Name" className="form-control" />
-          <input value={this.state.newUserEmail} onChange={(e) => this.setState({newUserEmail:e.target.value})} 
+          <input value={this.state.newUser.newUserEmail} 
+          onChange={(e) => this.setState({newUser:{...this.state.newUser,newUserEmail:e.target.value}})} 
           type="email" placeholder="Your Email" className="form-control" />
-          <input value={this.state.newUserUserName} onChange={(e) => this.setState({newUserUserName:e.target.value})}
+          <input value={this.state.newUser.newUserUserName} 
+          onChange={(e) => this.setState({newUser:{...this.state.newUser,newUserUserName:e.target.value}})}
           type="text" placeholder=" Your User Name" className="form-control"/>
-          <Button type="button" onClick= {this.addNewUser.bind(this)}
-          className="btn btn-info mt-2 mr-1" id="createUser">Create</Button>
-          <Button type="button" onClick={() => {this.setState({newUserName:"",newUserEmail:"",newUserUserName:""})}}
-           className="btn btn-warning mt-2 mr-1" id="cancelButton ">Cancel</Button>
-          <Button type="reset" onClick={() => {this.setState({newUserName:"",newUserEmail:"",newUserUserName:""})}}
-          className="btn btn-reset mt-2" id="clear">Clear</Button>
           </Form>
       </ModalBody>
       <ModalFooter>
         <div>
           Footer
         </div>
-        <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+        <Button type="button" onClick= {this.addNewUser.bind(this)}
+          className="btn btn-info mt-2 mr-1" id="createUser">Create</Button>
+          <Button type="reset" onClick={() => {this.setState({newUserName:"",newUserEmail:"",newUserUserName:""})}}
+          className="btn btn-reset mt-2" id="clear">Clear</Button>
+        <Button color="warning" className="mt-2" onClick={() => {
+          this.setState(
+            {newUser:{
+              newUserName:"",
+            newUserEmail:"",
+            newUserUserName:""
+            }
+          })
+          this.toggle();
+        }}>Cancel</Button>
       </ModalFooter>
       </Modal>
       <Table md={12}>
@@ -97,8 +143,10 @@ class Users extends Component {
             <td>{user.name}</td>
             <td>{user.userName}</td>
             <td>
-               <Button className="editBtn" onClick={() => this.editButton(user)}>Edit</Button>
-               <Button className="delBtn" onClick={() => this.deleteButton(user)}>Delete</Button>
+               <Button className="editBtn mx-1 far fa-edit" 
+               onClick={() => this.editUser(user)}> Edit</Button>
+               <Button className="delBtn mx-1 fas fa-trash-alt" 
+               onClick={() => this.deleteUser(user)}> Delete</Button>
             </td>
             </tr>
           ))}

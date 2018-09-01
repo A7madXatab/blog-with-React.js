@@ -8,10 +8,10 @@ function findUserId(postObject)
          .then(res =>res.json())
          .then(response => {
                  response.forEach(userObject => {
-                        if(userObject.userName === postObject.userName)
+                        if(userObject.userName === postObject.owner)
                         {
                                       postObject.userId = userObject.id;
-                                       findCategoryId(postObject);
+                                      findCategoryId(postObject);
                         }
                  })
          })
@@ -30,6 +30,17 @@ function findCategoryId(postObject)
                  })
          })
 }
+function deleteLinksToThisPost(postToDelete)
+{
+   fetch(baseUrl+"/comments")
+    .then(res => res.json())
+    .then(response => {
+      response.forEach(comment => {
+        if(comment.postId === postToDelete.postId)
+         axios.delete(baseUrl+"/comments/"+comment.id);
+      })
+    })
+}
 class Posts extends Component {
    state = {
      posts:[],
@@ -37,7 +48,7 @@ class Posts extends Component {
        body:"",
        title:"",
        categorey:"",
-       userName:""
+       owner:""
      },
      categories:[],
      modalOpen: false,
@@ -57,7 +68,6 @@ class Posts extends Component {
          if(this.state.newPost[key]==="")
          {
            this.setState({emptyField:true})
-           return;
          }
        }
        let newPostObject = {
@@ -69,6 +79,14 @@ class Posts extends Component {
          userId:""
        }
          findUserId(newPostObject)
+            this.toggle();
+            axios.get(baseUrl+"/posts")
+             .then((res) => {
+                this.toggle()
+                this.setState({
+                  users:res.data
+                })
+             })
   }
    componentDidMount()
    {
@@ -93,6 +111,8 @@ class Posts extends Component {
       this.setState((prevState) => ({
         posts:prevState.posts.filter((currentPost) => currentPost!==post)
       }))
+      deleteLinksToThisPost(post);
+      axios.delete(baseUrl+"/posts/"+post.id)
    }
    editPost(post)
    {
@@ -111,7 +131,7 @@ class Posts extends Component {
        if(!this.state.editIsOn)
         return null;
 
-        return <Button color="success" className="mt-2">Save</Button>
+        return <Button color="success" className="mt-2" >Save</Button>
    }
    editIsOn()
    {
@@ -120,17 +140,19 @@ class Posts extends Component {
 
       else return true
    }
-   saveChangesToPost()
+   saveChangesToPost(updatedPostObject)
    {
-   
+        updatedPostObject.title = this.state.newPost.title;
+        updatedPostObject.body = this.state.newPost.body;
+
+        console.log(updatedPostObject)
    }
   render() {
     let span="";
-    let button="";
     if(this.state.emptyField)
      span =<span>Please Fill all Fields</span>;
     return (
-      <div className="row">
+      <div className="row container-fluid">
       <Col md={12}>
       <Button className="btn  my-1" classID="new-post"  onClick={() =>{
          this.setState({
@@ -174,11 +196,22 @@ class Posts extends Component {
       </Form>
       </ModalBody>
       <ModalFooter>
-      {this.isEditing()}
+        {this.isEditing()}
         <Button onClick={this.postPost.bind(this)} disabled={this.editIsOn()}
        type="button" className="btn btn-info mt-2 mr-1" classID="postButton">Post</Button>
        <Button type="reset" className="btn mt-2 clear" classID="clear">Clear</Button>
-        <Button color="warning" className="mt-2" onClick={this.toggle}>Cancel</Button>
+        <Button color="warning" className="mt-2" onClick={() => {
+          this.setState({
+            newPost:{
+              body:"",
+              title:"",
+              categorey:"",
+              owner:""
+            },
+            editIsOn:false
+          })
+          this.toggle();
+        }}>Cancel</Button>
       </ModalFooter>
       </Modal>
       </div>
@@ -196,8 +229,8 @@ class Posts extends Component {
              <td>{post.title}</td>
              <td>{post.body.substring(0,30).concat(".....")}</td>
              <td>
-             <Button className="editBtn mx-1" onClick={() => this.editPost(post)}>Edit</Button>
-             <Button className="delBtn mx-1" onClick={() => this.deletePost(post)}>Delete</Button>
+             <Button className="editBtn mx-1  far fa-edit" onClick={() => this.editPost(post)}>Edit</Button>
+             <Button className="delBtn mx-1 fa-trash-alt" onClick={() => this.deletePost(post)}> Delete</Button>
              </td>
              </tr>
            ))}

@@ -70,6 +70,7 @@ thead.custom{
 }
 textarea.form-control{
   resize: none;
+  border-radius: 20px;
 }
 div.myNav{
   background-color: #24292e;
@@ -124,11 +125,11 @@ Modal.cc{
           color: black;
   }
 }
-#new-post{
+Button.new-post{
 background-color: #24292e;
   color: white;
 }
-#new-post:hover{
+Button.new-post:hover{
   background-color: white;
   color: black;
 }
@@ -222,7 +223,8 @@ a.customLink:hover{
 }
 div.postDiv h5{
 font-family: Poppins;
-color: #292d3e;
+color:#fff;
+margin-left: 10px
 }
 div.postDiv{
   margin-top: 10px;
