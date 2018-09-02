@@ -1,7 +1,7 @@
 {
   "posts": [
     {
-      "title": "Cut toxic people",
+      "title": "Cut toxic",
       "body": "putting tape on my webcam thinking how the FBI agent watched me cry everyday for a year and didn't once check up on me ",
       "owner": "Geralt Of Rivia",
       "userId": 3,
@@ -54,18 +54,27 @@
       "id": 7
     },
     {
-      "title": "testChanged",
-      "body": "akjsdj",
-      "owner": "changed",
-      "category": "changed",
-      "categoryId": 5,
-      "userId": 1,
+      "title": "KJAS",
+      "body": "ldjwdpio",
+      "owner": "Ciri",
+      "category": "Political",
+      "categoryId": 2,
+      "userId": 4,
       "id": 8
+    },
+    {
+      "title": "test",
+      "body": "qqqwdpmqwd[o",
+      "owner": "Ciri",
+      "category": "Political",
+      "categoryId": 2,
+      "userId": 4,
+      "id": 9
     }
   ],
   "comments": [
     {
-      "body": "2002 peter parker had no health insurance",
+      "body": "2001 peter parker had no health insurance",
       "owner": "AhmadGhost",
       "title": "really ",
       "postId": "3",
@@ -79,6 +88,14 @@
       "postId": "2",
       "userId": 4,
       "id": 4
+    },
+    {
+      "title": "test",
+      "body": "aoaidhwdoiw",
+      "postId": "2",
+      "owner": "AhmadGhost",
+      "userId": 1,
+      "id": 5
     }
   ],
   "users": [
@@ -147,10 +164,6 @@
     {
       "name": "changed",
       "id": 5
-    },
-    {
-      "name": "teshh",
-      "id": 6
     }
   ]
 }

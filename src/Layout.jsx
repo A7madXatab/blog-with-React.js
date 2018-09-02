@@ -20,15 +20,12 @@ class Layout extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <NavLink className="navbar-brand" to="/">Re:Coded Blog</NavLink>
+                    <NavLink className="navbar-brand" to="/">Re:Coded Blog</NavLink><i class="fas fa-arrow-left"></i><small> Home</small>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <NavLink  to="/posts" className="nav-link" activeClassName="active">Posts</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink  to="/MainPage" className="nav-link" activeClassName="active">MainPage</NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink to="/comments" className="nav-link" activeClassName="active">Comments</NavLink>

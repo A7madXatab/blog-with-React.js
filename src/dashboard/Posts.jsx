@@ -68,6 +68,7 @@ class Posts extends Component {
          if(this.state.newPost[key]==="")
          {
            this.setState({emptyField:true})
+           return;
          }
        }
        let newPostObject = {
@@ -78,9 +79,11 @@ class Posts extends Component {
          categoryId:"",
          userId:""
        }
-         findUserId(newPostObject)
-            this.toggle();
-            axios.get(baseUrl+"/posts")
+         
+         fetch(baseUrl+"/posts")
+          .then(() => {
+            findUserId(newPostObject)
+          })
              .then(() => {
               fetch(baseUrl+"/posts")
               .then(res => res.json())
@@ -169,6 +172,20 @@ class Posts extends Component {
 
      return <input className="form-control" type="text" value={this.state.newPost.id} readOnly></input>
   }
+  disableOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return false;
+
+     return true;
+  }
+  addClassOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return "";
+    
+     return "blurIt"
+  }
   render() {
     let span="";
     if(this.state.emptyField)
@@ -176,7 +193,7 @@ class Posts extends Component {
     return (
       <div className="row container-fluid">
       <Col md={12}>
-      <Button className="btn  my-1" classID="new-post"  onClick={() =>{
+      <Button className="btn my-1 new-post" onClick={() =>{
          this.setState({
           newPost:{
             body:"",
@@ -185,44 +202,59 @@ class Posts extends Component {
             userName:""
           }
          })
-        ;this.toggle()}}>New User</Button>
+        ;this.toggle()}}>New Post</Button>
     </Col>
     <div className="col-lg-12">
     <Modal isOpen={this.state.modalOpen} toggle={this.toggle} className="cc">
       <ModalHeader toggle={this.toggle}>New Post {span}
       </ModalHeader>
       <ModalBody>
-      <Form action="" classID="cc" className="card">
+      <Form action=""  className="card">
       <div className="card-header">
        <h3 className="text-center">Catigories</h3>
        </div>
        {this.state.categories.map((categorey,i) => (
          <div key={i} className="border-bottom">
          <Input value={categorey.name}
-         onClick={(e) =>this.setState({newPost:{...this.state.newPost,categorey:e.target.value}})} 
+         onClick={(e) =>this.setState(
+           {newPost:
+            {...this.state.newPost,categorey:e.target.value},
+               emptyField:false
+            }
+          )} 
          className="col-lg-3 col-sm-1 col-md-3" type="radio" name="categorey" />
          <label className="ml-5">{categorey.name}</label>
          </div>
        ))}
      </Form>
-      <Form>
+      <Form className="mx-1 px-1">
       {this.getReadOnlyId()}
       <input value={this.state.newPost.title} 
-      onChange={(e) => this.setState({newPost:{...this.state.newPost,title:e.target.value}})}
+      onChange={(e) => this.setState(
+        {newPost:{...this.state.newPost,title:e.target.value}, 
+        emptyField:false}
+      )}
       type="text" placeholder="Title" className="form-control" classID="title" />
-      <input value={this.state.newPost.owner} 
-      onChange={(e) => this.setState({newPost:{...this.state.newPost,userName:e.target.value}})}
+      <input value={this.state.newPost.owner} disabled={this.disableOnEdit()}
+      onChange={(e) => this.setState(
+        {newPost:{...this.state.newPost,userName:e.target.value}, 
+        emptyField:false}
+      )}
       type="text" placeholder="UserName" className="form-control" classID="owner-of-post" />
       <textarea  value={this.state.newPost.body} 
-      onChange={(e) =>this.setState({newPost:{...this.state.newPost,body:e.target.value}})}
+      onChange={(e) =>this.setState(
+        {newPost:{...this.state.newPost,body:e.target.value}, 
+        emptyField:false}
+      )}
       className="form-control" placeholder="What Do You Want to Say?"></textarea>
       </Form>
       </ModalBody>
       <ModalFooter>
         {this.isEditing()}
-        <Button onClick={this.postPost.bind(this)}
-       type="button" className="btn btn-info mt-2 mr-1" classID="postButton">Post</Button>
-       <Button type="reset" className="btn mt-2 clear" classID="clear">Clear</Button>
+        <Button onClick={this.postPost.bind(this)} disabled={this.disableOnEdit()}
+       type="button" className={`btn btn-info mt-2 mr-1 ${this.addClassOnEdit()}`} classID="postButton">Post</Button>
+       <Button  disabled={this.disableOnEdit()} 
+       type="reset" className={`btn mt-2 clear ${this.addClassOnEdit()}`}>Clear</Button>
         <Button color="warning" className="mt-2" onClick={() => {
           this.setState({
             newPost:{
@@ -253,7 +285,7 @@ class Posts extends Component {
              <td>{post.body.substring(0,30).concat(".....")}</td>
              <td>
              <Button className="editBtn mx-1  far fa-edit" onClick={() => this.editPost(post)}>Edit</Button>
-             <Button className="delBtn mx-1 fa-trash-alt" onClick={() => this.deletePost(post)}> Delete</Button>
+             <Button className="delBtn mx-1 fas fa-trash-alt" onClick={() => this.deletePost(post)}> Delete</Button>
              </td>
              </tr>
            ))}

@@ -31,7 +31,7 @@ function updatePostsMadeByUser(updatedUserObject)
    .then(res => res.json())
    .then(response => {
      response.forEach(post => {
-       if(post.id === updatedUserObject.id)
+       if(post.userId === updatedUserObject.id)
        {
          post.owner = updatedUserObject.userName;
          axios.put(rootUrl+"/posts/"+post.id,post);
@@ -146,6 +146,13 @@ class Users extends Component {
      })
      
   }
+  addClassOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return "";
+    
+     return "blurIt"
+  }
    deleteUser(user)
    {
       this.setState((prevState) => ({
@@ -168,11 +175,18 @@ class Users extends Component {
      })
      this.toggle();
    }
+   disableOnEdit()
+   {
+     if(!this.state.editIsOn)
+      return false;
+
+      return true;
+   }
   render() {
     return (
       <div className="row">
       <Col md={12}>
-      <Button className="btn  my-1" classID="new-post"  onClick={() => {
+      <Button className="btn my-1 new-post" onClick={() => {
          this.setState({
            newUser:{
              name:"",
@@ -189,7 +203,7 @@ class Users extends Component {
       <ModalBody>
           <Form>
           {this.getReadOnlyId()}
-          <input  value={this.state.newUser.newUserName} 
+          <input  value={this.state.newUser.newUserName}
           onChange={(e) => this.setState({newUser:{...this.state.newUser,newUserName:e.target.value}})}
           type="text" placeholder="Your Name" className="form-control" />
           <input value={this.state.newUser.newUserEmail} 
@@ -202,10 +216,11 @@ class Users extends Component {
       </ModalBody>
       <ModalFooter>
       {this.isEditing()}
-        <Button type="button" onClick= {this.addNewUser.bind(this)}
-          className="btn btn-info mt-2 mr-1" id="createUser">Create</Button>
-          <Button type="reset" onClick={() => {this.setState({newUserName:"",newUserEmail:"",newUserUserName:""})}}
-          className="btn btn-reset mt-2">Clear</Button>
+        <Button type="button" onClick= {this.addNewUser.bind(this)} disabled={this.disableOnEdit()}
+          className={`btn btn-info mt-2 mr-1 ${this.addClassOnEdit()}`} id="createUser">Create</Button>
+          <Button type="reset" disabled={this.disableOnEdit()} 
+          onClick={() => {this.setState({newUser:{newUserName:"",newUserEmail:"",newUserUserName:""}})}}
+          className={`btn btn-reset mt-2 ${this.addClassOnEdit()}`}>Clear</Button>
         <Button color="warning" className="mt-2" onClick={() => {
           this.setState(
             {newUser:{
@@ -233,9 +248,9 @@ class Users extends Component {
             <td>{user.name}</td>
             <td>{user.userName}</td>
             <td>
-               <Button className="editBtn mx-1 far fa-edit" 
+               <Button className="btn editBtn mx-1 far fa-edit " 
                onClick={() => this.editUser(user)}> Edit</Button>
-               <Button className="delBtn mx-1 fas fa-trash-alt" 
+               <Button className="btn delBtn mx-1 fas fa-trash-alt" 
                onClick={() => this.deleteUser(user)}> Delete</Button>
             </td>
             </tr>

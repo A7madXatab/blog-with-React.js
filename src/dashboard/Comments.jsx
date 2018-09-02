@@ -51,7 +51,43 @@ class Comments extends Component {
       if(!this.state.editIsOn)
        return null;
 
-       return <Button color="success" className="mt-2" >Save</Button>
+       return <Button color="success" className="mt-2" onClick={this.saveChanges.bind(this)}>Save</Button>
+  }
+  saveChanges()
+  {
+    let updatedCommentObject = this.state.newComment;
+    axios.put(baseUrl+"/comments/"+updatedCommentObject.id,updatedCommentObject)
+     .then(() => {
+      fetch(baseUrl+"/comments")
+      .then(res => res.json())
+      .then(response =>{
+        this.setState({
+          comments:response,
+          newComment:{
+            title:"",
+            body:"",
+            postId:"",
+            owner:""
+         },
+         emptyField:false
+        })
+        this.toggle();
+      })
+     })
+  }
+  getReadOnlyId()
+  {
+    if(!this.state.editIsOn)
+     return null;
+
+     return <input className="form-control" type="text" value={this.state.newComment.id} readOnly></input>
+  }
+  disableOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return false
+    
+     return true
   }
   componentDidMount()
   {
@@ -78,17 +114,29 @@ class Comments extends Component {
           owner:this.state.newComment.owner,
           userId:"",
       }
-      findeUserId(newCommentObject);
+      axios.get(baseUrl+"/comments")
+       .then((res) => {
+        findeUserId(newCommentObject);
+        return res;
+       })
+       .then(res => {
+          this.setState({
+            comments:res.data,
+            newComment:{
+              title:"",
+              body:"",
+              postId:"",
+              owner:""
+            },
+            editIsOn:false
+          })
+          this.toggle();
+      })
 }
 editComment(commentToEdit)
 {
   this.setState({
-    newComment:{
-      title:commentToEdit.title,
-      body:commentToEdit.body,
-      owner:commentToEdit.owner,
-      postId:commentToEdit.postId
-    },
+    newComment:commentToEdit,
     editIsOn:true
   })
   this.toggle();
@@ -100,6 +148,13 @@ deleteComment(commentToDelete)
        }))
        axios.delete(baseUrl+"/comments/"+commentToDelete.id);
 }
+addClassOnEdit()
+{
+  if(!this.state.editIsOn)
+   return "";
+  
+   return "blurIt"
+}
   render() {
     let span="";
     if(this.state.emptyField)
@@ -107,12 +162,23 @@ deleteComment(commentToDelete)
     return (
       <div className="row">
       <Col md={12}>
-      <Button className="btn  my-1" classID="new-post"  onClick={this.toggle}>New Comment</Button>
+      <Button className="btn my-1 new-post"   onClick={() => {
+        this.setState({
+          newComment:{ 
+          title:"",
+          body:"",
+          postId:"",
+          owner:""},
+          editIsOn:false
+        })
+        this.toggle();
+      }}>New Comment</Button>
     </Col>
       <Modal isOpen={this.state.modalOpen} toggle={this.toggle}>
       <ModalHeader toggle={this.toggle}>New User {span}</ModalHeader>
       <ModalBody>
         <Form>
+        {this.getReadOnlyId()}
         <input value={this.state.newComment.title} 
         onChange={(e) => {
           this.setState(
@@ -121,7 +187,7 @@ deleteComment(commentToDelete)
           )}
         }
         type="text" placeholder="Title" className="form-control commentTitle"  />
-        <input value={this.state.newComment.postId}
+        <input value={this.state.newComment.postId} disabled={this.disableOnEdit()}
         onChange={(e) => {
           this.setState(
             {newComment:{...this.state.newComment,postId:e.target.value},
@@ -129,7 +195,7 @@ deleteComment(commentToDelete)
           )}
         }
         type="numebr" placeholder="Post ID" className="form-control postId" />
-        <input value={this.state.newComment.owner}
+        <input value={this.state.newComment.owner} disabled={this.disableOnEdit()}
         onChange={(e) => {
           this.setState(
             {newComment:{...this.state.newComment,owner:e.target.value},
@@ -147,8 +213,12 @@ deleteComment(commentToDelete)
       </ModalBody>
       <ModalFooter>
          {this.isEditing()}
-        <Button  className="btn btn-info mt-2 mr-1" onClick={this.postComment.bind(this)}>Post</Button>
-        <Button  className="btn btn-reset mt-2" onClick={this.reset}>Clear</Button>
+        <Button disabled={this.disableOnEdit()}  
+        className={`btn btn-info mt-2 mr-1 ${this.addClassOnEdit()}`} 
+        onClick={this.postComment.bind(this)}>Post</Button>
+        <Button disabled={this.disableOnEdit()}  
+        className={`btn btn-reset mt-2 ${this.addClassOnEdit()}`} 
+        onClick={this.reset}>Clear</Button>
         <Button color="warning" className="mt-2" onClick={() => {
           this.reset();
           this.toggle();

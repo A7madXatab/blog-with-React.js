@@ -154,17 +154,33 @@ class Categories extends Component {
             })
           })
   }
+  disableOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return false;
+
+     return true;
+  }
+  addClassOnEdit()
+  {
+    if(!this.state.editIsOn)
+     return "";
+    
+     return "blurIt"
+  }
   render() {
     let span=""
      if(this.state.emptyField)
       span = <span>Please fill The input</span>
     return (
-      <div className="row">
+      <div className="row col-lg-12">
       <Col md={12}>
-      <Button className="btn mb-4 new-post" onClick={() => {
+      <Button className="btn mb-1 new-post" onClick={() => {
         this.setState({newCategory:{
           name:""
-        }})
+        },
+      editIsOn:false
+    })
         this.toggle()
       }}>New Categorey</Button>
     </Col>
@@ -180,10 +196,10 @@ class Categories extends Component {
       </ModalBody>
       <ModalFooter>
       {this.isEditing()}
-        <Button onClick={this.addNewCategory.bind(this)}
-        type="button" className="btn btn-info mt-2 mr-1">Add</Button>
-        <Button onClick={this.reset.bind(this)}
-        type="reset" className="btn btn-reset mt-2"
+        <Button onClick={this.addNewCategory.bind(this)} disabled={this.disableOnEdit()}
+        type="button" className={`btn btn-info mt-2 mr-1 ${this.addClassOnEdit()}`}>Add</Button>
+        <Button onClick={this.reset.bind(this)} disabled={this.disableOnEdit()}
+        type="reset" className={`btn btn-reset mt-2 ${this.addClassOnEdit()}`}
         >Clear</Button>
         <Button color="warning" className="mt-2" onClick={() => {
           this.reset()
@@ -206,7 +222,7 @@ class Categories extends Component {
                   <td>
                   <Button className="editBtn mx-1 far fa-edit" 
                   onClick={() => this.editCategory(category)}> Edit</Button>
-                    <Button className="delBtn mx-1 fa-trash-alt" 
+                    <Button className="delBtn mx-1 fas fa-trash-alt" 
                     onClick={() => this.deleteCategory(category)}> Delete</Button>
                   </td>
                 </tr>

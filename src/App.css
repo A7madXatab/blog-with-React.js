@@ -50,36 +50,37 @@ button.myBtn.active{
 button.delBtn{
   background-color: darkred;
   color: white;
+  border: none;
 }
 button.delBtn:hover{
   background-color: orangered;
 }
 button.editBtn{
-  background-color:#292d3e;
+  background-color:#000;
   color: white;
-}
-button.editBtn:hover{
-  background:linear-gradient(to left,#292d3e,#52597a);
-  color: white;
-}
-button#clear{
-  color: white;
+  border: none;
 }
 thead.custom{
  background-color: #24292e;
 }
 textarea.form-control{
   resize: none;
-  border-radius: 20px;
+  height: 50px;
+  border:2px solid #24292e;
+  border-radius: 10px;
+}
+input.form-control{
+  border-radius: 8px;
+  border:2px solid #24292e;
+}
+input.form-control:focus{
+  border-color: #fff;
 }
 NavBar.myNav{
   background-color:lightgray;
 }
 nav.myNav{
   background:#24292e;
-}
-Modal.cc{
-  width: 800px;
 }
 .commentsDiv{
   background-color: lightgray;
@@ -127,7 +128,6 @@ Modal.cc{
 }
 Button.new-post{
 background-color: #24292e;
-  color: white;
 }
 Button.new-post:hover{
   background-color: white;
@@ -137,9 +137,8 @@ Button.new-post:hover{
   margin: 0 auto;
   display: none;
 }
-#cc{
-  margin:  0 auto;
-  display: none;
+button.blurIt{
+  filter: blur(3px);
 }
 div.card{
   box-shadow: 0 3px 8px #000;
@@ -151,9 +150,6 @@ div.card-header{
 }
 span{
 border-bottom: 1px solid #292d3e
-}
-#usersList,#postsList{
-  display: none;
 }
 div.ll{
   border-left: 3px solid #292d3e
